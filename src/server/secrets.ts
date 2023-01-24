@@ -7,7 +7,9 @@ export const GITHUB_CLIENT_SECRET = prod
   : process.env['TCQ_LOCAL_GH_SECRET']!;
 export const GITHUB_CLIENT_ID = prod ? process.env['TCQ_GH_ID']! : process.env['TCQ_LOCAL_GH_ID']!;
 export const SESSION_SECRET = process.env['TCQ_SESSION_SECRET']!;
-export const CDB_SECRET = process.env['TCQ_CDB_SECRET']!;
+
+export const SELF_URL = prod ? process.env['TCQ_SELF_URL']! : process.env['TCQ_LOCAL_SELF_URL']!;
+
 export const MONGODB_URL_SECRET = prod
   ? process.env['TCQ_MONGODB_URI']!
   : process.env['TCQ_LOCAL_MONGODB_URI']!;
@@ -27,12 +29,10 @@ if (!SESSION_SECRET) {
   log.fatal('ERROR\tNo session secret. Set TCQ_SESSION_SECRET.');
   process.exit(1);
 }
-
-if (!CDB_SECRET) {
-  log.fatal('ERROR\tNo CosmosDB secret. Set TCQ_CDB_SECRET.');
+if (prod && !SELF_URL) {
+  log.fatal('ERROR\tNo self URL set. Set TCQ_SELF_URL or TCQ_LOCAL_SELF_URL.');
   process.exit(1);
 }
-
 if (!MONGODB_URL_SECRET) {
   log.fatal('ERROR\tNo MongoDB/FerretDB secret. Set TCQ_MONGODB_URI or TCQ_LOCAL_MONGODB_URI.');
   process.exit(1);
