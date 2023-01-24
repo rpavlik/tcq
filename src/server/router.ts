@@ -26,7 +26,7 @@ declare module 'express-session' {
 }
 
 const rf = promisify(readFile);
-import client from './telemetry';
+// import client from './telemetry';
 
 const router = Router();
 router.get('/', async (req, res) => {
@@ -130,13 +130,13 @@ router.post('/meetings', async (req, res) => {
   };
 
   await createMeeting(meeting);
-  client.trackEvent({ name: 'New Meeting' });
+  // client.trackEvent({ name: 'New Meeting' });
   res.send(meeting);
   res.end();
 });
 
 router.get('/login', function(req, res) {
-  client.trackEvent({ name: 'home-login', properties: { ref: req.query.ref } });
+  // client.trackEvent({ name: 'home-login', properties: { ref: req.query.ref } });
   res.redirect('/auth/github');
 });
 

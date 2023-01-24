@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import * as secrets from './secrets';
 // important that this block come very early as appinsights shims many things
-import client from './telemetry';
+// import client from './telemetry';
 
 import log from './logger';
 import * as express from 'express';
@@ -22,7 +22,7 @@ const server = new Server(app as any); // this seems to work, and I see docs abo
 const io = socketio(server, { perMessageDeflate: false });
 const port = process.env.PORT || 3000;
 log.info('Starting server');
-server.listen(port, function () {
+server.listen(port, function() {
   log.info('Application started and listening on port ' + port);
 });
 
@@ -32,14 +32,14 @@ const sessionStore = new DocumentDBStore({
   host: dbConstants.HOST,
   database: dbConstants.DATABASE_ID,
   collection: dbConstants.SESSION_COLLECTION_ID,
-  key: secrets.CDB_SECRET
+  key: secrets.CDB_SECRET,
 });
 
 const session = Session({
   secret: secrets.SESSION_SECRET,
   store: sessionStore,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 });
 
 app.use(function requireHTTPS(req, res, next) {
@@ -50,8 +50,8 @@ app.use(function requireHTTPS(req, res, next) {
   next();
 });
 
-app.use(function (req, res, next) {
-  client.trackNodeHttpRequest({ request: req, response: res });
+app.use(function(req, res, next) {
+  // client.trackNodeHttpRequest({ request: req, response: res });
   next();
 });
 app.use(require('express-bunyan-logger')());
@@ -62,7 +62,7 @@ app.use(passport.session());
 app.use(routes);
 app.use(express.static('dist/client/'));
 
-io.use(function (socket, next) {
+io.use(function(socket, next) {
   var req = socket.handshake;
   var res = {};
   session(req as any, res as any, next);

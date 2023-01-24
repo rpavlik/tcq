@@ -11,7 +11,7 @@ export const CDB_SECRET = process.env['TCQ_CDB_SECRET']!;
 
 export const SELF_URL = prod ? process.env['TCQ_SELF_URL']! : process.env['TCQ_LOCAL_SELF_URL']!;
 
-export const AI_IKEY = process.env['TCQ_AI_IKEY'];
+// export const AI_IKEY = process.env['TCQ_AI_IKEY'];
 
 if (!GITHUB_CLIENT_SECRET) {
   log.fatal('ERROR\tNo client secret. Set TCQ_GH_SECRET.');
@@ -38,7 +38,7 @@ if (prod && !SELF_URL) {
   process.exit(1);
 }
 
-if (!AI_IKEY) {
-  log.fatal('ERROR\tNo Application Insights Instrumentation Key. Set TCQ_AI_IKEY.');
-  process.exit(1);
-}
+// if (!AI_IKEY) {
+//   log.fatal('ERROR\tNo Application Insights Instrumentation Key. Set TCQ_AI_IKEY.');
+//   process.exit(1);
+// }

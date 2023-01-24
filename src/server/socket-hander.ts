@@ -13,7 +13,7 @@ import gha from './ghapi';
 const PRIORITIES: Speaker['type'][] = ['poo', 'question', 'reply', 'topic'];
 import * as uuid from 'uuid';
 import axios from 'axios';
-import client from './telemetry';
+// import client from './telemetry';
 import { EmitEventNames } from 'strict-event-emitter-types';
 
 let socks = new Map<string, Set<Message.ServerSocket>>();
@@ -48,13 +48,13 @@ export default async function connection(socket: Message.ServerSocket) {
     name: githubUser.name,
     organization: githubUser.organization,
     ghid: githubUser.ghid,
-    ghUsername: githubUser.ghUsername
+    ghUsername: githubUser.ghUsername,
   };
 
   const meeting = await getMeeting(meetingId);
 
   let state: Message.State = Object.keys(meeting)
-    .filter(k => k[0] !== '_')
+    .filter((k) => k[0] !== '_')
     .reduce((s, k) => {
       (s as any)[k] = (meeting as any)[k];
       return s;
@@ -88,7 +88,7 @@ export default async function connection(socket: Message.ServerSocket) {
       meeting.currentAgendaItem = meeting.agenda[0];
     } else {
       let id = meeting.currentAgendaItem.id;
-      let currentIndex = meeting.agenda.findIndex(i => i.id === id);
+      let currentIndex = meeting.agenda.findIndex((i) => i.id === id);
       meeting.currentAgendaItem = meeting.agenda[currentIndex + 1];
     }
 
@@ -96,7 +96,7 @@ export default async function connection(socket: Message.ServerSocket) {
       id: uuid(),
       user: meeting.currentAgendaItem.user,
       topic: 'Introducing: ' + meeting.currentAgendaItem.name,
-      type: 'topic'
+      type: 'topic',
     };
 
     await updateMeeting(meeting);
@@ -198,7 +198,7 @@ export default async function connection(socket: Message.ServerSocket) {
       id: uuid(),
       name: message.name,
       timebox: Number(message.timebox),
-      user: owner
+      user: owner,
     };
 
     if (isNaN(agendaItem.timebox)) {
@@ -208,7 +208,7 @@ export default async function connection(socket: Message.ServerSocket) {
 
     meeting.agenda.push(agendaItem);
     await updateMeeting(meeting);
-    client.trackEvent({ name: 'New Agenda Item' });
+    // client.trackEvent({ name: 'New Agenda Item' });
     emitAll(meetingId, 'newAgendaItem', agendaItem);
     respond(200);
   }
@@ -216,7 +216,7 @@ export default async function connection(socket: Message.ServerSocket) {
   async function newTopic(respond: Responder, message: Message.NewQueuedSpeakerRequest) {
     const speaker: Speaker = {
       user,
-      ...message
+      ...message,
     };
 
     const meeting = await getMeeting(meetingId);
@@ -236,16 +236,16 @@ export default async function connection(socket: Message.ServerSocket) {
     await updateMeeting(meeting);
     emitAll(meetingId, 'newQueuedSpeaker', {
       position: index,
-      speaker: speaker
+      speaker: speaker,
     });
-    client.trackEvent({ name: 'New Speaker' });
+    // client.trackEvent({ name: 'New Speaker' });
     respond(200);
   }
 
   async function newReaction(respond: Responder, message: Message.NewReactionRequest) {
     const reaction: Reaction = {
       user: user,
-      reaction: message.reactionType
+      reaction: message.reactionType,
     };
 
     const meeting = await getMeeting(meetingId);
@@ -256,9 +256,9 @@ export default async function connection(socket: Message.ServerSocket) {
     const { reactions } = meeting;
 
     let index = reactions.findIndex(function(r) {
-      return r.reaction == reaction.reaction && r.user.ghid == reaction.user.ghid}
-    );
-    
+      return r.reaction == reaction.reaction && r.user.ghid == reaction.user.ghid;
+    });
+
     if (index === -1) {
       reactions.push(reaction);
       await updateMeeting(meeting);
@@ -335,7 +335,7 @@ export default async function connection(socket: Message.ServerSocket) {
           id: uuid(),
           user: meeting.currentAgendaItem.user,
           topic: 'Presenting: ' + meeting.currentAgendaItem.name,
-          type: 'topic'
+          type: 'topic',
         };
       } else {
         // not sure if this can happen with current meeting flow
@@ -364,13 +364,13 @@ export default async function connection(socket: Message.ServerSocket) {
       if (!message) message = {};
       message.status = status;
       socket.emit('response', message);
-      client.trackRequest({
-        resultCode: String(status),
-        name: 'WebSocket Handler: ' + fn.name,
-        duration: Date.now() - start,
-        url: socket.handshake.url,
-        success: String(status)[0] === '2'
-      });
+      // client.trackRequest({
+      //   resultCode: String(status),
+      //   name: 'WebSocket Handler: ' + fn.name,
+      //   duration: Date.now() - start,
+      //   url: socket.handshake.url,
+      //   success: String(status)[0] === '2',
+      // });
     }
 
     return function(...args: any[]) {
@@ -397,7 +397,7 @@ const emitAll = function(meetingId: string, type: EmitEventNames<Message.ServerS
   const ss = socks.get(meetingId);
   if (!ss) return;
 
-  ss.forEach(s => {
+  ss.forEach((s) => {
     s.emit(type as any, arg);
   });
 };
