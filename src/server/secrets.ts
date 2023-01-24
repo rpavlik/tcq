@@ -8,6 +8,9 @@ export const GITHUB_CLIENT_SECRET = prod
 export const GITHUB_CLIENT_ID = prod ? process.env['TCQ_GH_ID']! : process.env['TCQ_LOCAL_GH_ID']!;
 export const SESSION_SECRET = process.env['TCQ_SESSION_SECRET']!;
 export const CDB_SECRET = process.env['TCQ_CDB_SECRET']!;
+
+export const SELF_URL = prod ? process.env['TCQ_SELF_URL']! : process.env['TCQ_LOCAL_SELF_URL']!;
+
 export const AI_IKEY = process.env['TCQ_AI_IKEY'];
 
 if (!GITHUB_CLIENT_SECRET) {
@@ -27,6 +30,11 @@ if (!SESSION_SECRET) {
 
 if (!CDB_SECRET) {
   log.fatal('ERROR\tNo CosmosDB secret. Set TCQ_CDB_SECRET.');
+  process.exit(1);
+}
+
+if (prod && !SELF_URL) {
+  log.fatal('ERROR\tNo self URL set. Set TCQ_SELF_URL or TCQ_LOCAL_SELF_URL.');
   process.exit(1);
 }
 
