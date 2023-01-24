@@ -10,10 +10,8 @@ import * as socketio from 'socket.io';
 import { Server } from 'http';
 import * as Session from 'express-session';
 import socketHandler from './socket-hander';
-// import DocumentDBSession = require('documentdb-session');
-// import session from 'express-session';
 import { MongoClient } from 'mongodb';
-import MongoStore from 'connect-mongo';
+const MongoStore = require('connect-mongo');
 import * as mongo from 'mongodb';
 
 import * as dbConstants from './db';
