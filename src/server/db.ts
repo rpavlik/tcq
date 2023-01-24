@@ -17,7 +17,7 @@ const meetingsCollection = getMeetingsCollection();
 
 export async function updateMeeting(meeting: Meeting) {
   let collection = await meetingsCollection;
-  await collection.updateOne({ id: meeting.id }, meeting);
+  await collection.replaceOne({ id: meeting.id }, meeting);
 }
 
 export async function getMeeting(meetingId: string) {
