@@ -4,7 +4,7 @@ import AgendaItem from '../shared/AgendaItem';
 import User, { getByUsername } from './User';
 import Reaction, { ReactionTypes } from '../shared/Reaction';
 import GitHubAuthenticatedUser from '../shared/GitHubAuthenticatedUser';
-import * as socketio from 'socket.io';
+import * as SocketIO from 'socket.io';
 import { isChair } from './User';
 import * as Message from '../shared/Messages';
 import { updateMeeting, getMeeting, getMeetingsCollection } from './db';
@@ -388,7 +388,7 @@ interface Responder {
   (code: number, message?: object): void;
 }
 
-const emitAll = function(meetingId: string, type: EmitEventNames<Message.ServerSocket>, arg?: any) {
+const emitAll = function(meetingId: string, type: EmitEventNames<ServerSocket>, arg?: any) {
   const ss = socks.get(meetingId);
   if (!ss) return;
 

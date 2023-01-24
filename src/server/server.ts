@@ -6,20 +6,18 @@ import log from './logger';
 import * as express from 'express';
 import passport from './passport';
 import routes from './router';
-import * as socketio from 'socket.io';
-import { Server } from 'http';
+import * as SocketIO from 'socket.io';
+import { createServer } from 'http';
 import * as Session from 'express-session';
 import socketHandler from './socket-hander';
 import { MongoClient } from 'mongodb';
 const MongoStore = require('connect-mongo');
-import * as mongo from 'mongodb';
 
-import * as dbConstants from './db';
 import * as bodyParser from 'body-parser';
 
 const app = express();
-const server = new Server(app as any); // this seems to work, and I see docs about it, but typings complain
-const io = socketio(server, { perMessageDeflate: false });
+const server = createServer(app);
+const io = new SocketIO.Server(server, { perMessageDeflate: false });
 const port = process.env.PORT || 3000;
 log.info('Starting server');
 server.listen(port, function() {
