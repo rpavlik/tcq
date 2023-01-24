@@ -8,6 +8,7 @@ const common = require('./webpack.common.js');
 //  - https://vue-loader.vuejs.org/en/workflow/production.html
 //
 module.exports = merge(common, {
+  mode: 'production',
   devtool: 'source-map',
   plugins: [
     // short-circuits all Vue.js warning code
@@ -17,11 +18,11 @@ module.exports = merge(common, {
       }
     }),
     // minify with dead-code elimination
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    })
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: true,
+    //   compress: {
+    //     warnings: false
+    //   }
+    // })
   ]
 });
