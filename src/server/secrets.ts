@@ -7,9 +7,12 @@ export const GITHUB_CLIENT_SECRET = prod
   : process.env['TCQ_LOCAL_GH_SECRET']!;
 export const GITHUB_CLIENT_ID = prod ? process.env['TCQ_GH_ID']! : process.env['TCQ_LOCAL_GH_ID']!;
 export const SESSION_SECRET = process.env['TCQ_SESSION_SECRET']!;
-export const CDB_SECRET = process.env['TCQ_CDB_SECRET']!;
 
 export const SELF_URL = prod ? process.env['TCQ_SELF_URL']! : process.env['TCQ_LOCAL_SELF_URL']!;
+
+export const MONGODB_URL_SECRET = prod
+  ? process.env['TCQ_MONGODB_URL']!
+  : process.env['TCQ_LOCAL_MONGODB_URL']!;
 
 // export const AI_IKEY = process.env['TCQ_AI_IKEY'];
 
@@ -28,16 +31,15 @@ if (!SESSION_SECRET) {
   process.exit(1);
 }
 
-if (!CDB_SECRET) {
-  log.fatal('ERROR\tNo CosmosDB secret. Set TCQ_CDB_SECRET.');
-  process.exit(1);
-}
-
 if (prod && !SELF_URL) {
   log.fatal('ERROR\tNo self URL set. Set TCQ_SELF_URL or TCQ_LOCAL_SELF_URL.');
   process.exit(1);
 }
 
+if (!MONGODB_URL_SECRET) {
+  log.fatal('ERROR\tNo MongoDB/FerretDB secret. Set TCQ_MONGODB_URL or TCQ_LOCAL_MONGODB_URL.');
+  process.exit(1);
+}
 // if (!AI_IKEY) {
 //   log.fatal('ERROR\tNo Application Insights Instrumentation Key. Set TCQ_AI_IKEY.');
 //   process.exit(1);

@@ -13,7 +13,10 @@ import * as socketio from 'socket.io';
 import { Server } from 'http';
 import * as Session from 'express-session';
 import socketHandler from './socket-hander';
-const DocumentDBSession = require('documentdb-session');
+import { MongoClient } from 'mongodb';
+const MongoStore = require('connect-mongo');
+import * as mongo from 'mongodb';
+
 import * as dbConstants from './db';
 import * as bodyParser from 'body-parser';
 
@@ -26,18 +29,13 @@ server.listen(port, function() {
   log.info('Application started and listening on port ' + port);
 });
 
-const DocumentDBStore = DocumentDBSession(Session);
+const mdbClient = new MongoClient(secrets.MONGODB_URL_SECRET);
 
-const sessionStore = new DocumentDBStore({
-  host: dbConstants.HOST,
-  database: dbConstants.DATABASE_ID,
-  collection: dbConstants.SESSION_COLLECTION_ID,
-  key: secrets.CDB_SECRET,
-});
+const mdbSessionStore = MongoStore.create({ client: mdbClient });
 
 const session = Session({
   secret: secrets.SESSION_SECRET,
-  store: sessionStore,
+  store: mdbSessionStore,
   resave: true,
   saveUninitialized: true,
 });
