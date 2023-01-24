@@ -43,7 +43,7 @@
     "express-session": "^1.15.5",
     "github": "^11.0.0",
     "p-limit": "^1.2.0",
-    "passport": "^0.4.0",
+    "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "socket.io": "^2.5.0",
     "socket.io-client": "^2.0.3",
