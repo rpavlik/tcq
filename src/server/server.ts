@@ -28,15 +28,7 @@ server.listen(port, function() {
 
 const mdbClient = new MongoClient(secrets.MONGODB_URL_SECRET);
 
-const mdbSessionStore = MongoStore.create({ mdbClient });
-// const DocumentDBStore = DocumentDBSession(Session);
-
-// const sessionStore = new DocumentDBStore({
-//   host: dbConstants.HOST,
-//   database: dbConstants.DATABASE_ID,
-//   collection: dbConstants.SESSION_COLLECTION_ID,
-//   key: secrets.CDB_SECRET,
-// });
+const mdbSessionStore = MongoStore.create({ client: mdbClient });
 
 const session = Session({
   secret: secrets.SESSION_SECRET,

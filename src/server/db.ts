@@ -1,14 +1,11 @@
-export const HOST = 'https://tcq.documents.azure.com:443/';
 export const DATABASE_ID = 'tcq';
 export const COLLECTION_ID = 'items';
 export const SESSION_COLLECTION_ID = 'sessions';
 
 import { Document, MongoClient, WithId } from 'mongodb';
 import * as secrets from './secrets';
-// import * as docdb from 'documentdb-typescript';
 import Speaker from '../shared/Speaker';
 import Meeting from '../shared/Meeting';
-// import { DocumentResource } from 'documentdb-typescript/typings/_DocumentDB';
 
 const mdbClient = new MongoClient(secrets.MONGODB_URL_SECRET);
 const mdbDatabase = mdbClient.db(DATABASE_ID);
