@@ -8,6 +8,9 @@ export const GITHUB_CLIENT_SECRET = prod
 export const GITHUB_CLIENT_ID = prod ? process.env['TCQ_GH_ID']! : process.env['TCQ_LOCAL_GH_ID']!;
 export const SESSION_SECRET = process.env['TCQ_SESSION_SECRET']!;
 export const CDB_SECRET = process.env['TCQ_CDB_SECRET']!;
+export const MONGODB_URL_SECRET = prod
+  ? process.env['TCQ_MONGODB_URI']!
+  : process.env['TCQ_LOCAL_MONGODB_URI']!;
 // export const AI_IKEY = process.env['TCQ_AI_IKEY'];
 
 if (!GITHUB_CLIENT_SECRET) {
@@ -30,6 +33,10 @@ if (!CDB_SECRET) {
   process.exit(1);
 }
 
+if (!MONGODB_URL_SECRET) {
+  log.fatal('ERROR\tNo MongoDB/FerretDB secret. Set TCQ_MONGODB_URI or TCQ_LOCAL_MONGODB_URI.');
+  process.exit(1);
+}
 // if (!AI_IKEY) {
 //   log.fatal('ERROR\tNo Application Insights Instrumentation Key. Set TCQ_AI_IKEY.');
 //   process.exit(1);
