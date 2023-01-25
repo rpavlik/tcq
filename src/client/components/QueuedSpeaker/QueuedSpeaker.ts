@@ -9,11 +9,11 @@ export const QueuedSpeaker = template(
   Vue.extend({
     props: {
       speaker: {
-        default: {} as Speaker
+        default: {} as Speaker,
       },
       index: {
-        default: 0
-      }
+        default: 0,
+      },
     },
     computed: {
       displayedOrg(): string {
@@ -21,12 +21,12 @@ export const QueuedSpeaker = template(
       },
       isMe(): boolean {
         return this.speaker.user.ghid === (this.$root as any).user.ghid;
-      }
+      },
     },
     methods: {
       async dequeue() {
         await request('deleteQueuedSpeakerRequest', {
-          id: this.speaker.id
+          id: this.speaker.id,
         });
       },
 
@@ -36,7 +36,7 @@ export const QueuedSpeaker = template(
         await request('reorderQueueRequest', {
           id: this.speaker.id,
           oldIndex: this.index,
-          newIndex: this.index - 1
+          newIndex: this.index - 1,
         });
       },
 
@@ -44,9 +44,9 @@ export const QueuedSpeaker = template(
         await request('reorderQueueRequest', {
           id: this.speaker.id,
           oldIndex: this.index,
-          newIndex: this.index + 1
+          newIndex: this.index + 1,
         });
-      }
-    }
+      },
+    },
   })
 );

@@ -11,7 +11,7 @@ export const TempCheck = template(
   Vue.extend({
     props: {
       reactions: {
-        default: undefined as Reaction[] | undefined
+        default: undefined as Reaction[] | undefined,
       },
     },
     methods: {
@@ -22,19 +22,19 @@ export const TempCheck = template(
       },
       countReactions(type: ReactionTypes) {
         if (this.reactions) {
-          return this.reactions.filter(reaction => reaction.reaction == type).length;
+          return this.reactions.filter((reaction) => reaction.reaction == type).length;
         }
         return 0;
       },
       listNames(type: ReactionTypes) {
         if (this.reactions) {
           return this.reactions
-            .filter(reaction => reaction.reaction == type)
-            .map(reaction => reaction.user.name)
-            .join(", ");
+            .filter((reaction) => reaction.reaction == type)
+            .map((reaction) => reaction.user.name)
+            .join(', ');
         }
         return 0;
       },
-    }
+    },
   })
 );

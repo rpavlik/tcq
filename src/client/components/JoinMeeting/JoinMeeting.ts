@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import template from './JoinMeeting.html';
 import axios from 'axios';
-import User from '../../../shared/User';
 
 export const JoinMeeting = template(
   Vue.extend({
@@ -9,7 +8,7 @@ export const JoinMeeting = template(
       return {
         meetingId: '',
         helpText: '4 characters',
-        hasError: false
+        hasError: false,
       };
     },
 
@@ -32,7 +31,7 @@ export const JoinMeeting = template(
         }
 
         document.location.href = '/meeting/' + this.meetingId;
-      }
-    }
+      },
+    },
   })
 );

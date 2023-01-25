@@ -3,7 +3,7 @@ let chairs = new Set([
   972891 /* daniel */,
   189835 /* littledan */,
   301201 /* leo balter */,
-  6708936 /* rex */
+  6708936 /* rex */,
 ]);
 export function isChair(userid: number) {
   return chairs.has(userid);

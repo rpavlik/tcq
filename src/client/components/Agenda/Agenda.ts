@@ -11,23 +11,23 @@ import { request } from '../../ClientSocket';
 
 export const Agenda = template(
   Vue.extend({
-    data: function () {
+    data: function() {
       return {
         creating: false,
         loading: false,
         newAgendaItem: { name: '' } as NewAgendaItemRequest,
         errorMessage: '',
-        timeboxError: ''
+        timeboxError: '',
       };
     },
     props: {
       agenda: {
-        default: [] as AgendaItem[]
-      }
+        default: [] as AgendaItem[],
+      },
     },
     components: {
       draggable,
-      agendaItem: AgendaItemComponent
+      agendaItem: AgendaItemComponent,
     },
     methods: {
       async reorderAgendaItems(e: any) {
@@ -36,7 +36,7 @@ export const Agenda = template(
         try {
           await request('reorderAgendaItemRequest', {
             newIndex,
-            oldIndex
+            oldIndex,
           });
         } catch (e) {
           this.agenda.splice(oldIndex, 0, this.agenda.splice(newIndex, 1)[0]);
@@ -50,7 +50,7 @@ export const Agenda = template(
         this.loading = true;
         try {
           await request('deleteAgendaItemRequest', {
-            index
+            index,
           });
         } finally {
           this.loading = false;
@@ -94,7 +94,7 @@ export const Agenda = template(
         this.errorMessage = '';
         this.creating = false;
         this.newAgendaItem = { name: '' } as any;
-      }
-    }
+      },
+    },
   })
 );
