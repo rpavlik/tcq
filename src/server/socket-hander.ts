@@ -1,20 +1,20 @@
 import Meeting from '../shared/Meeting';
 import Speaker from '../shared/Speaker';
 import AgendaItem from '../shared/AgendaItem';
-import User, { getByUsername } from './User';
+import User, { fromAuthUser } from './User';
 import Reaction, { ReactionTypes } from '../shared/Reaction';
-import GitHubAuthenticatedUser from '../shared/GitHubAuthenticatedUser';
+import AuthenticatedUser from '../shared/AuthenticatedUser';
 import * as socketio from 'socket.io';
 import { isChair } from './User';
 import * as Message from '../shared/Messages';
 import { updateMeeting, getMeeting, getMeetingsCollection } from './db';
 import { TopicTypes } from '../shared/Speaker';
-import gha from './ghapi';
 const PRIORITIES: Speaker['type'][] = ['poo', 'question', 'reply', 'topic'];
 import * as uuid from 'uuid';
 import axios from 'axios';
 // import client from './telemetry';
 import { EmitEventNames } from 'strict-event-emitter-types';
+import Users from './Users';
 
 let socks = new Map<string, Set<Message.ServerSocket>>();
 
@@ -41,15 +41,9 @@ export default async function connection(socket: Message.ServerSocket) {
 
   meetingSocks.add(socket);
 
-  let githubUser: GitHubAuthenticatedUser = (socket.handshake as any).session.passport.user;
-  let ghapi = gha(githubUser.accessToken);
+  let authUser: AuthenticatedUser = Users.userFromHandshake(socket.handshake);
 
-  let user: User = {
-    name: githubUser.name,
-    organization: githubUser.organization,
-    ghid: githubUser.ghid,
-    ghUsername: githubUser.ghUsername,
-  };
+  let user: User = fromAuthUser(authUser);
 
   const meeting = await getMeeting(meetingId);
 
@@ -188,7 +182,7 @@ export default async function connection(socket: Message.ServerSocket) {
     let owner;
 
     try {
-      owner = await getByUsername(message.ghUsername, githubUser.accessToken);
+      owner = await Users.getByUsername(message.username, authUser.accessToken);
     } catch (e) {
       respond(400, { message: 'Github username not found' });
       return;
@@ -256,7 +250,7 @@ export default async function connection(socket: Message.ServerSocket) {
     const { reactions } = meeting;
 
     let index = reactions.findIndex(function(r) {
-      return r.reaction == reaction.reaction && r.user.ghid == reaction.user.ghid;
+      return r.reaction == reaction.reaction && r.user.userId == reaction.user.userId;
     });
 
     if (index === -1) {
@@ -298,7 +292,7 @@ export default async function connection(socket: Message.ServerSocket) {
       return;
     }
 
-    if (!isChair(user, meeting) && queuedSpeakers[index].user.ghid !== user.ghid) {
+    if (!isChair(user, meeting) && queuedSpeakers[index].user.userId !== user.userId) {
       // unauthorized
       respond(403, { message: 'not authorized' });
       return;
@@ -314,9 +308,9 @@ export default async function connection(socket: Message.ServerSocket) {
   async function nextSpeaker(respond: Responder, message: Message.NextSpeakerRequest) {
     const meeting = await getMeeting(meetingId);
     if (
-      user.ghid &&
+      user.userId &&
       meeting.currentSpeaker &&
-      meeting.currentSpeaker.user.ghid !== user.ghid &&
+      meeting.currentSpeaker.user.userId !== user.userId &&
       !isChair(user, meeting)
     ) {
       // unauthorized

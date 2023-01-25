@@ -1,11 +1,43 @@
+// must come first
+require('dotenv').config();
+
 import log from './logger';
 
 const prod = process.env.NODE_ENV === 'production';
 
-export const GITHUB_CLIENT_SECRET = prod
-  ? process.env['TCQ_GH_SECRET']!
-  : process.env['TCQ_LOCAL_GH_SECRET']!;
-export const GITHUB_CLIENT_ID = prod ? process.env['TCQ_GH_ID']! : process.env['TCQ_LOCAL_GH_ID']!;
+export const USER_SOURCE = process.env['TCQ_USER_SOURCE']!;
+export const USER_SOURCE_GITLAB = 'gitlab';
+export const USER_SOURCE_GITHUB = 'github';
+
+function getSecretAndId(envVarAbbrev, shouldRequire) {
+  var prefix = 'TCQ_' + (prod ? '' : 'LOCAL_') + envVarAbbrev;
+  var secretEnv = prefix + '_SECRET';
+  var idEnv = prefix + '_ID';
+  var creds = {
+    secret: process.env[secretEnv]!,
+    id: process.env[idEnv]!,
+  };
+  if (shouldRequire) {
+    if (!creds.secret) {
+      log.fatal('ERROR\tNo client secret. Set ' + secretEnv);
+      process.exit(1);
+    }
+    if (!creds.id) {
+      log.fatal('ERROR\tNo client id. Set ' + idEnv);
+      process.exit(1);
+    }
+  }
+  return creds;
+}
+
+// GitHub configuration
+export const GITHUB_CLIENT = getSecretAndId('GH', USER_SOURCE === USER_SOURCE_GITHUB);
+
+// GitLab configuration
+export const GITLAB_CLIENT = getSecretAndId('GL', USER_SOURCE === USER_SOURCE_GITLAB);
+export const GITLAB_HOST = process.env['TCQ_GL_HOST']!;
+
+// Other config
 export const SESSION_SECRET = process.env['TCQ_SESSION_SECRET']!;
 
 export const SELF_URL = prod ? process.env['TCQ_SELF_URL']! : process.env['TCQ_LOCAL_SELF_URL']!;
@@ -16,13 +48,11 @@ export const MONGODB_URL_SECRET = prod
 
 // export const AI_IKEY = process.env['TCQ_AI_IKEY'];
 
-if (!GITHUB_CLIENT_SECRET) {
-  log.fatal('ERROR\tNo client secret. Set TCQ_GH_SECRET.');
+if (!USER_SOURCE) {
+  log.fatal('ERROR\tNo user source. Set TCQ_USER_SOURCE to github or gitlab.');
   process.exit(1);
-}
-
-if (!GITHUB_CLIENT_ID) {
-  log.fatal('ERROR\tNo client id. Set TCQ_GH_ID.');
+} else if (USER_SOURCE !== USER_SOURCE_GITLAB && USER_SOURCE !== USER_SOURCE_GITHUB) {
+  log.fatal('ERROR\tTCQ_USER_SOURCE not recognized. Set TCQ_USER_SOURCE to github or gitlab.');
   process.exit(1);
 }
 

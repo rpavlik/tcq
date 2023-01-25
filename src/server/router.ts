@@ -7,16 +7,17 @@ import { isChair } from './chairs';
 import Meeting from '../shared/Meeting';
 import { ensureLoggedIn } from 'connect-ensure-login';
 import { resolve as resolvePath } from 'path';
-import { promisify } from 'util';
+import { format, promisify } from 'util';
 import { readFile } from 'fs';
 import { createMeeting, getMeeting } from './db';
 import * as b64 from 'base64-url';
-import User, { getByUsername, fromGHAU, getByUsernames } from './User';
-import GitHubAuthenticatedUser from '../shared/GitHubAuthenticatedUser';
+import User, { fromAuthUser } from './User';
+import AuthenticatedUser from '../shared/AuthenticatedUser';
+import Users from './Users';
 
 declare global {
   namespace Express {
-    interface User extends GitHubAuthenticatedUser {}
+    interface User extends AuthenticatedUser {}
   }
 }
 declare module 'express-session' {
@@ -31,7 +32,7 @@ const rf = promisify(readFile);
 const router = Router();
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
-    let user = fromGHAU(req.user);
+    let user = fromAuthUser(req.user);
 
     let path = resolvePath(__dirname, '../client/new.html');
     let contents = await rf(path, { encoding: 'utf8' });
@@ -47,6 +48,21 @@ router.get('/', async (req, res) => {
     res.send(contents);
     res.end();
   }
+});
+
+// We include this on every page to inject some dynamic content.
+router.get('/sessiondata', async (req, res) => {
+  res.type('text/javascript');
+  let content = format(
+    'window.userSourceDescription =  %s;',
+    JSON.stringify(Users.source.description)
+  );
+  if (req.isAuthenticated()) {
+    let user = fromAuthUser(req.user);
+    content += format('window.user = %s;', JSON.stringify(user));
+  }
+  res.send(content);
+  res.end();
 });
 
 router.get('/meeting/:id', async (req, res) => {
@@ -68,8 +84,8 @@ router.get('/meeting/:id', async (req, res) => {
 
   let path = resolvePath(__dirname, '../client/meeting.html');
   let contents = await rf(path, { encoding: 'utf8' });
-  let clientData = `<script>window.ghid = "${req.user.ghid}"; window.isChair = ${isChair(
-    req.user.ghid
+  let clientData = `<script>window.user_id = "${req.user.userId}"; window.isChair = ${isChair(
+    req.user.userId
   )}</script>`;
 
   // insert client data script prior to the first script so this data is available.
@@ -98,7 +114,7 @@ router.post('/meetings', async (req, res) => {
 
   let chairUsers: User[] = [];
   try {
-    chairUsers = await getByUsernames(usernames, req.user.accessToken);
+    chairUsers = await Users.getByUsernames(usernames, req.user.accessToken);
   } catch (e) {
     res.status(400);
     res.send({ message: e.message });
@@ -135,25 +151,7 @@ router.post('/meetings', async (req, res) => {
   res.end();
 });
 
-router.get('/login', function(req, res) {
-  // client.trackEvent({ name: 'home-login', properties: { ref: req.query.ref } });
-  res.redirect('/auth/github');
-});
-
-router.get('/auth/github', passport.authenticate('github'));
-router.get(
-  '/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    if (req.session!.meetingId) {
-      res.redirect('/meeting/' + req.session!.meetingId);
-      delete req.session!.meetingId;
-    } else {
-      res.redirect('/');
-    }
-  }
-);
+Users.setupRoutes(router, passport);
 
 router.get('/logout', function(req, res) {
   req.logout(function(err) {

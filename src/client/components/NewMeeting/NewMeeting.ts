@@ -11,7 +11,7 @@ export const NewMeeting = template(
       };
     },
     created() {
-      this.chairs = (window as any).user.ghUsername; // populated via router.js
+      this.chairs = (window as any).user.username; // populated via router.js
     },
     methods: {
       async newMeeting() {

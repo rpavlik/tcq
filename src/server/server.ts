@@ -1,10 +1,7 @@
-// must come first
-require('dotenv').config();
-
 import * as secrets from './secrets';
 // important that this block come very early as appinsights shims many things
 // import client from './telemetry';
-
+require('source-map-support').install();
 import log from './logger';
 import * as express from 'express';
 import passport from './passport';
@@ -15,10 +12,8 @@ import * as Session from 'express-session';
 import socketHandler from './socket-hander';
 import { MongoClient } from 'mongodb';
 const MongoStore = require('connect-mongo');
-import * as mongo from 'mongodb';
-
-import * as dbConstants from './db';
 import * as bodyParser from 'body-parser';
+import { setupUserSource } from './Users';
 
 const app = express();
 const server = new Server(app as any); // this seems to work, and I see docs about it, but typings complain

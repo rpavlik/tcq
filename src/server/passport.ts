@@ -1,14 +1,7 @@
 import * as passport from 'passport';
-import GitHubAuthenticatedUser from '../shared/GitHubAuthenticatedUser';
-import ghs from './ghstrategy';
+import Users, { setupUserSource } from './Users';
 
-passport.use(ghs);
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj as GitHubAuthenticatedUser);
-});
+setupUserSource();
+Users.setupPassport(passport);
 
 export default passport;
