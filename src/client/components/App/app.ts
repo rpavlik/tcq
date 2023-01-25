@@ -58,6 +58,7 @@ let AppComponent = Vue.extend({
       view: 'agenda',
       timeboxEnd: undefined,
       timeboxSecondsLeft: undefined,
+      socket: undefined,
       notifyRequestFailure: () => {},
       notifyRequestSuccess: () => {}
     } as Meeting & AdditionalAppState;
