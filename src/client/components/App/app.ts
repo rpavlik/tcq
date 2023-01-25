@@ -5,12 +5,10 @@ import { QueueControl } from '../QueueControl/QueueControl';
 
 import { Agenda } from '../Agenda/Agenda';
 
-import Speaker from '../../../shared/Speaker';
 import Reaction from '../../../shared/Reaction';
 import appTemplate from './app.html';
 
 import './app.scss';
-import AgendaItem from '../../../shared/AgendaItem';
 import Meeting from '../../../shared/Meeting';
 import * as Message from '../../../shared/Messages';
 import socket from '../../ClientSocket';
@@ -30,8 +28,8 @@ Vue.mixin({
       }
 
       return str;
-    }
-  }
+    },
+  },
 });
 interface AdditionalAppState {
   user: User;
@@ -60,12 +58,12 @@ let AppComponent = Vue.extend({
       timeboxSecondsLeft: undefined,
       socket: undefined,
       notifyRequestFailure: () => {},
-      notifyRequestSuccess: () => {}
+      notifyRequestSuccess: () => {},
     } as Meeting & AdditionalAppState;
   },
   components: {
     Agenda,
-    QueueControl
+    QueueControl,
   },
   methods: {
     newTopic(message: Message.NewQueuedSpeakerRequest) {
@@ -91,91 +89,91 @@ let AppComponent = Vue.extend({
     showAgenda() {
       (this.$refs['queue'] as Vue).$el.setAttribute('style', 'display: none;');
       (this.$refs['agenda'] as Vue).$el.setAttribute('style', '');
-    }
+    },
   },
   watch: {
     chairs() {
-      this.isChair = this.chairs.some(u => {
+      this.isChair = this.chairs.some((u) => {
         return u.ghid === this.user.ghid;
       });
-    }
+    },
   },
   created() {
-    socket.on('state', data => {
-      Object.keys(data).forEach(prop => {
+    socket.on('state', (data) => {
+      Object.keys(data).forEach((prop) => {
         // this is unfortunate
         (this as any)[prop] = (data as any)[prop];
       });
     });
 
-    socket.on('newQueuedSpeaker', data => {
+    socket.on('newQueuedSpeaker', (data) => {
       this.queuedSpeakers.splice(data.position, 0, data.speaker);
     });
 
-    socket.on('deleteQueuedSpeaker', data => {
+    socket.on('deleteQueuedSpeaker', (data) => {
       let index = this.queuedSpeakers.findIndex(function(queuedSpeaker) {
         return queuedSpeaker.id === data.id;
       });
       this.queuedSpeakers.splice(index, 1);
     });
 
-    socket.on('newCurrentSpeaker', data => {
+    socket.on('newCurrentSpeaker', (data) => {
       this.currentSpeaker = data;
       this.queuedSpeakers.shift();
     });
 
-    socket.on('newReaction', data => {
-      console.log("new", data)
-      console.log(this.reactions)
+    socket.on('newReaction', (data) => {
+      console.log('new', data);
+      console.log(this.reactions);
       this.reactions.push(data);
     });
-    
-    socket.on('deleteReaction', data => {
-      let index = this.reactions.findIndex((r: Reaction) => {   
-        return r.reaction == data.reaction && r.user.ghid == data.user.ghid
+
+    socket.on('deleteReaction', (data) => {
+      let index = this.reactions.findIndex((r: Reaction) => {
+        return r.reaction == data.reaction && r.user.ghid == data.user.ghid;
       });
       this.reactions.splice(index, 1);
     });
 
-    socket.on('trackTemperature', isTracking => {
+    socket.on('trackTemperature', (isTracking) => {
       if (!isTracking) {
         this.reactions = [];
       }
       this.trackTemperature = isTracking;
     });
 
-    socket.on('newAgendaItem', data => {
+    socket.on('newAgendaItem', (data) => {
       this.agenda.push(data);
     });
 
-    socket.on('newCurrentTopic', data => {
+    socket.on('newCurrentTopic', (data) => {
       this.currentTopic = data;
     });
 
-    socket.on('reorderAgendaItem', data => {
+    socket.on('reorderAgendaItem', (data) => {
       this.agenda.splice(data.newIndex, 0, this.agenda.splice(data.oldIndex, 1)[0]);
     });
 
-    socket.on('deleteAgendaItem', data => {
+    socket.on('deleteAgendaItem', (data) => {
       this.agenda.splice(data.index, 1);
     });
 
-    socket.on('nextAgendaItem', data => {
+    socket.on('nextAgendaItem', (data) => {
       this.currentAgendaItem = data;
     });
 
-    socket.on('reorderQueue', data => {
+    socket.on('reorderQueue', (data) => {
       this.queuedSpeakers.splice(data.newIndex, 0, this.queuedSpeakers.splice(data.oldIndex, 1)[0]);
     });
 
-    socket.on('updateQueuedSpeaker', data => {
-      const speaker = this.queuedSpeakers.find(q => q.id === data.id);
+    socket.on('updateQueuedSpeaker', (data) => {
+      const speaker = this.queuedSpeakers.find((q) => q.id === data.id);
       if (!speaker) return;
       speaker.topic = data.topic;
       speaker.type = data.type;
       speaker.user = data.user;
     });
-  }
+  },
 });
 
 // apply template

@@ -15,9 +15,6 @@ import * as Session from 'express-session';
 import socketHandler from './socket-hander';
 import { MongoClient } from 'mongodb';
 const MongoStore = require('connect-mongo');
-import * as mongo from 'mongodb';
-
-import * as dbConstants from './db';
 import * as bodyParser from 'body-parser';
 
 const app = express();

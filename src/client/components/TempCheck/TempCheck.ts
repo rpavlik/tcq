@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Reaction, { ReactionTypes } from '../../../shared/Reaction';
 import template from './TempCheck.html';
-import AgendaItem from '../../../shared/AgendaItem';
 import * as Message from '../../../shared/Messages';
-import uuid from 'uuid';
 import './TempCheck.scss';
 import { request } from '../../ClientSocket';
 
@@ -11,7 +9,7 @@ export const TempCheck = template(
   Vue.extend({
     props: {
       reactions: {
-        default: undefined as Reaction[] | undefined
+        default: undefined as Reaction[] | undefined,
       },
     },
     methods: {
@@ -22,19 +20,19 @@ export const TempCheck = template(
       },
       countReactions(type: ReactionTypes) {
         if (this.reactions) {
-          return this.reactions.filter(reaction => reaction.reaction == type).length;
+          return this.reactions.filter((reaction) => reaction.reaction == type).length;
         }
         return 0;
       },
       listNames(type: ReactionTypes) {
         if (this.reactions) {
           return this.reactions
-            .filter(reaction => reaction.reaction == type)
-            .map(reaction => reaction.user.name)
-            .join(", ");
+            .filter((reaction) => reaction.reaction == type)
+            .map((reaction) => reaction.user.name)
+            .join(', ');
         }
         return 0;
       },
-    }
+    },
   })
 );

@@ -8,62 +8,61 @@ import AgendaItem from '../../../shared/AgendaItem';
 import Speaker from '../../../shared/Speaker';
 import Reaction from '../../../shared/Reaction';
 import * as Message from '../../../shared/Messages';
-import uuid from 'uuid';
 import { request } from '../../ClientSocket';
 
 export const QueueControl = template(
   Vue.extend({
     props: {
       currentAgendaItem: {
-        default: undefined as AgendaItem | undefined
+        default: undefined as AgendaItem | undefined,
       },
       currentTopic: {
-        default: undefined as Speaker | undefined
+        default: undefined as Speaker | undefined,
       },
       currentSpeaker: {
-        default: undefined as Speaker | undefined
+        default: undefined as Speaker | undefined,
       },
       queuedSpeakers: {
-        default: [] as Speaker[]
+        default: [] as Speaker[],
       },
       timeboxEnd: {
-        default: undefined as Date | string | undefined
+        default: undefined as Date | string | undefined,
       },
       timeboxSecondsLeft: {
-        default: undefined as number | undefined
+        default: undefined as number | undefined,
       },
       socket: {
-        default: null as Message.ClientSocket | null
+        default: null as Message.ClientSocket | null,
       },
       reactions: {
-        default: undefined as Reaction[] | undefined
+        default: undefined as Reaction[] | undefined,
       },
       trackTemperature: {
-        default: false as boolean
-      }
+        default: false as boolean,
+      },
     },
     components: {
       QueuedSpeaker,
       CurrentSpeaker,
       SpeakerControls,
-      TempCheck
+      TempCheck,
     },
     methods: {
       async nextAgendaItem() {
         await request('nextAgendaItemRequest', {
-          currentItemId: this.currentAgendaItem ? this.currentAgendaItem.id : undefined
+          currentItemId: this.currentAgendaItem ? this.currentAgendaItem.id : undefined,
         } as Message.NextAgendaItemRequest);
       },
       async trackTemp() {
         await request('trackTemperatureRequest', {
-          track: true
+          track: true,
         } as Message.TrackTemperatureRequest);
       },
       async stopTemp() {
         await request('trackTemperatureRequest', {
-          track: false
+          track: false,
         } as Message.TrackTemperatureRequest);
-      }
-    }
+      },
+    },
   })
 );

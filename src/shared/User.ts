@@ -3,4 +3,4 @@ export default interface User {
   organization: string;
   ghid: number;
   ghUsername: string;
-};
+}

@@ -3,7 +3,6 @@ export const COLLECTION_ID = 'items';
 
 import { Document, MongoClient, WithId } from 'mongodb';
 import * as secrets from './secrets';
-import Speaker from '../shared/Speaker';
 import Meeting from '../shared/Meeting';
 
 const meetingsCollection = getMeetingsCollection();
@@ -28,12 +27,4 @@ export async function createMeeting(meeting: Meeting) {
 export async function getMeetingsCollection() {
   const mdbClient = new MongoClient(secrets.MONGODB_URL_SECRET);
   return mdbClient.db(DATABASE_ID).collection(COLLECTION_ID);
-}
-
-const reUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-function validUUID(seen: Set<string>, uuid: string) {
-  if (seen.has(uuid)) return false;
-  if (!reUUID.exec(uuid)) return false;
-
-  return true;
 }

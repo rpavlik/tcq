@@ -1,17 +1,13 @@
 import { Router } from 'express';
-import { Session } from 'express-session';
 import passport from './passport';
-import * as express from 'express';
-const uuid = require('uuid');
 import { isChair } from './chairs';
 import Meeting from '../shared/Meeting';
-import { ensureLoggedIn } from 'connect-ensure-login';
 import { resolve as resolvePath } from 'path';
 import { promisify } from 'util';
 import { readFile } from 'fs';
 import { createMeeting, getMeeting } from './db';
 import * as b64 from 'base64-url';
-import User, { getByUsername, fromGHAU, getByUsernames } from './User';
+import User, { fromGHAU, getByUsernames } from './User';
 import GitHubAuthenticatedUser from '../shared/GitHubAuthenticatedUser';
 
 declare global {
