@@ -15,6 +15,7 @@
         <a class="navbar-item is-active" @click="showQueue">Queue</a>
       </div>
       <div class="navbar-end">
+        <span class="navbar-item">Logged in as {{formatUser($root.user)}}<br>{{$root.userSourceDescription}}</span>
         <a class="navbar-item" href="/logout">Log Out</a>
       </div>
     </div>
