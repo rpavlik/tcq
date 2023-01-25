@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import './new.scss';
 import { NewMeeting } from '../../components/NewMeeting/NewMeeting';
 import { JoinMeeting } from '../../components/JoinMeeting/JoinMeeting';

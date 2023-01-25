@@ -2,8 +2,6 @@ import Vue from 'vue';
 import template from './Agenda.html';
 import './Agenda.scss';
 import draggable from 'vuedraggable';
-import * as Message from '../../../shared/Messages';
-import uuid from 'uuid';
 import AgendaItem from '../../../shared/AgendaItem';
 import { NewAgendaItemRequest } from '../../../shared/Messages';
 import { AgendaItemComponent } from '../AgendaItem/AgendaItemComponent';

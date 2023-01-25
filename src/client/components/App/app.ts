@@ -5,12 +5,10 @@ import { QueueControl } from '../QueueControl/QueueControl';
 
 import { Agenda } from '../Agenda/Agenda';
 
-import Speaker from '../../../shared/Speaker';
 import Reaction from '../../../shared/Reaction';
 import appTemplate from './app.html';
 
 import './app.scss';
-import AgendaItem from '../../../shared/AgendaItem';
 import Meeting from '../../../shared/Meeting';
 import * as Message from '../../../shared/Messages';
 import socket from '../../ClientSocket';

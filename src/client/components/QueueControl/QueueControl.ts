@@ -8,7 +8,6 @@ import AgendaItem from '../../../shared/AgendaItem';
 import Speaker from '../../../shared/Speaker';
 import Reaction from '../../../shared/Reaction';
 import * as Message from '../../../shared/Messages';
-import uuid from 'uuid';
 import { request } from '../../ClientSocket';
 
 export const QueueControl = template(

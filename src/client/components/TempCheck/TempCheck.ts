@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Reaction, { ReactionTypes } from '../../../shared/Reaction';
 import template from './TempCheck.html';
-import AgendaItem from '../../../shared/AgendaItem';
 import * as Message from '../../../shared/Messages';
-import uuid from 'uuid';
 import './TempCheck.scss';
 import { request } from '../../ClientSocket';
 

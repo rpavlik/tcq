@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Speaker from '../../../shared/Speaker';
 import template from './QueuedSpeaker.html';
-import * as Message from '../../../shared/Messages';
 import './QueuedSpeaker.scss';
 import { request } from '../../ClientSocket';
 
