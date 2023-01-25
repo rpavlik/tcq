@@ -84,7 +84,7 @@ export const Agenda = template(
 
       showForm() {
         this.creating = true;
-        this.newAgendaItem.ghUsername = this.$root.$data.user.ghUsername;
+        this.newAgendaItem.username = this.$root.$data.user.username;
         Vue.nextTick(() => {
           (this.$refs['item-name-input'] as HTMLInputElement).focus();
         });

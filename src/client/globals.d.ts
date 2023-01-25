@@ -1,4 +1,4 @@
-declare var ghid: number;
+declare var user_id: number;
 declare var isChair: boolean;
 
 declare module '*.html' {

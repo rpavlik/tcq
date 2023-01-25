@@ -30,8 +30,8 @@ export const CurrentSpeaker = template(
     },
     computed: {
       isMe(): boolean {
-        return this.speaker.user.ghid === (this.$root as any).user.ghid;
-      }
-    }
+        return this.speaker.user.user_id === (this.$root as any).user.user_id;
+      },
+    },
   })
 );
