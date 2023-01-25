@@ -1,3 +1,6 @@
+// must come first
+require('dotenv').config();
+
 import * as secrets from './secrets';
 // important that this block come very early as appinsights shims many things
 import client from './telemetry';
