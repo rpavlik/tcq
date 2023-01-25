@@ -14,6 +14,7 @@
     appInsights.trackPageView();
   </script>
   -->
+  <script src="/sessiondata"></script>
 </head>
 <body>
   <!--display=block hack to make always visible on mobile -->
@@ -21,7 +22,11 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="/" id=tcq-logo>TCQ</a>
       <span style="flex-grow: 1"></span>
-      <a href="/login?ref=0" class=navbar-item>Log In with GitHub</a>
+      <a href="/login?ref=0" class=navbar-item>Log In with 
+        <script>
+          document.write(window.userSourceDescription);
+        </script>
+      </a>
     </div>
   </nav>
   <section class=section>
@@ -47,7 +52,12 @@
   </section>
   <section class="columns section">
     <div class="column has-text-centered">
-      <a href="/login?ref=1" class="button is-primary is-large">Log in with GitHub to get started!</a>
+      <a href="/login?ref=1" class="button is-primary is-large">
+        Log in with 
+        <script>
+          document.write(window.userSourceDescription);
+        </script>
+        to get started!</a>
     </div>
   </section>
 </body>

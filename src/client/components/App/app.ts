@@ -39,6 +39,7 @@ interface AdditionalAppState {
   notifyRequestFailure: Function; // TODO
   notifyRequestSuccess: Function;
   isChair: boolean;
+  userSourceDescription: string;
 }
 
 let AppComponent = Vue.extend({
@@ -59,6 +60,7 @@ let AppComponent = Vue.extend({
       timeboxEnd: undefined,
       timeboxSecondsLeft: undefined,
       socket: undefined,
+      userSourceDescription: undefined,
       notifyRequestFailure: () => {},
       notifyRequestSuccess: () => {},
     } as Meeting & AdditionalAppState;
@@ -101,6 +103,7 @@ let AppComponent = Vue.extend({
     },
   },
   created() {
+    this.userSourceDescription = (window as any).userSourceDescription;
     socket.on('state', (data) => {
       Object.keys(data).forEach((prop) => {
         // this is unfortunate

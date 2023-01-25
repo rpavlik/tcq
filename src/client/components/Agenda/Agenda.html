@@ -24,7 +24,7 @@
           v-model="newAgendaItem.username"
           @keyup.enter=createNewAgendaItem
           @keyup.esc=cancelForm>
-        <div class="help">GitHub user name (omit the @)</div>
+        <div class="help">{{$root.userSourceDescription}} user name (omit the @)</div>
       </div>
 
       <div class="control timebox-control">
