@@ -1,5 +1,5 @@
 <section class=section ref="agenda">
-  <draggable @end=reorderAgendaItems :options="{ disabled: loading || !$root.isChair }" @start=dragStart ref="drag-container">
+  <draggable @end=reorderAgendaItems disabled="loading || !$root.isChair" @start=dragStart ref="drag-container">
     <div v-for="(item, index) of agenda" :key="item.id">
       <agenda-item :item=item :index=index @delete="deleteAgendaItem(index)"></agenda-item>
     </div>
