@@ -1,0 +1,15 @@
+<footer class="footer">
+  <div class="content has-text-centered" v-if="user">
+    Logged in as: {{ user.name }} (@{{ user.username }})
+  </div>
+  <div class="content has-text-centered">
+    User authentication source: {{ userSourceDescription }}
+  </div>
+  <div class="content has-text-centered">
+    <p>
+      <strong>TCQ</strong> is open source software, and was originally developed by <a href="https://github.com/bterlson/tcq">Brian Terlson</a> for <a href="https://github.com/tc39/how-we-work">TC39</a>.
+      This fork is maintained by <a href="https://github.com/rpavlik/tcq">Ryan Pavlik</a> (<a href="https://collabora.com">Collabora</a>) for the use of <a href="https://khronos.org">the Khronos Group</a>.
+      You are welcome and encouraged to <a href="https://github.com/rpavlik/tcq">get the source and contribute</a>.
+    </p>
+  </div>
+</footer>
