@@ -115,6 +115,7 @@ class GitLabSource implements UserSource {
       oauthToken: accessToken,
     });
     let res = await api.Users.username(username);
+    log.info(res, 'lookup username: ', username);
     if (res.length > 0) {
       let user: User = {
         userId: res[0].id,
