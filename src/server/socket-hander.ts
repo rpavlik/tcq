@@ -15,6 +15,7 @@ import axios from 'axios';
 // import client from './telemetry';
 import { EmitEventNames } from 'strict-event-emitter-types';
 import Users from './Users';
+import log from './logger';
 
 let socks = new Map<string, Set<Message.ServerSocket>>();
 
@@ -184,7 +185,8 @@ export default async function connection(socket: Message.ServerSocket) {
     try {
       owner = await Users.getByUsername(message.username, authUser.accessToken);
     } catch (e) {
-      respond(400, { message: 'Github username not found' });
+      log.error(e, `Could not find user ${message.username}`);
+      respond(400, { message: 'Username not found' });
       return;
     }
 
