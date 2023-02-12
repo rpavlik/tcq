@@ -3,7 +3,6 @@ import { Session } from 'express-session';
 import passport from './passport';
 import * as express from 'express';
 const uuid = require('uuid');
-import { isChair } from './chairs';
 import Meeting from '../shared/Meeting';
 import { ensureLoggedIn } from 'connect-ensure-login';
 import { resolve as resolvePath } from 'path';
@@ -11,7 +10,7 @@ import { format, promisify } from 'util';
 import { readFile } from 'fs';
 import { createMeeting, getMeeting } from './db';
 import * as b64 from 'base64-url';
-import User, { fromAuthUser } from './User';
+import User, { fromAuthUser, isChair } from './User';
 import AuthenticatedUser from '../shared/AuthenticatedUser';
 import Users from './Users';
 
@@ -85,7 +84,8 @@ router.get('/meeting/:id', async (req, res) => {
   let path = resolvePath(__dirname, '../client/meeting.html');
   let contents = await rf(path, { encoding: 'utf8' });
   let clientData = `<script>window.user_id = "${req.user.userId}"; window.isChair = ${isChair(
-    req.user.userId
+    req.user,
+    meeting
   )}</script>`;
 
   // insert client data script prior to the first script so this data is available.
