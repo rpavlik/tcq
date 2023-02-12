@@ -67,7 +67,7 @@ export interface DeleteQueuedSpeakerRequest {
 export interface NewAgendaItemRequest {
   name: string;
   timebox?: string;
-  ghUsername: string;
+  username: string;
 }
 
 export interface DeleteAgendaItem {
