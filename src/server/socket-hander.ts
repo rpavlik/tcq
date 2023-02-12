@@ -196,8 +196,7 @@ export default async function connection(socket: Message.ServerSocket) {
     };
 
     if (isNaN(agendaItem.timebox)) {
-      respond(400, { message: 'Timebox duration required' });
-      return;
+      agendaItem.timebox = 0;
     }
 
     meeting.agenda.push(agendaItem);
