@@ -26,7 +26,6 @@ interface ServerEvents {
 interface ClientEvents {
   nextAgendaItem: NextAgendaItem;
   newCurrentSpeaker: NewCurrentSpeaker;
-  updateTimeboxEnd: UpdateTimeboxEnd;
   newQueuedSpeaker: NewQueuedSpeaker;
   deleteQueuedSpeaker: DeleteQueuedSpeaker;
   newAgendaItem: AgendaItem;
@@ -124,7 +123,6 @@ export interface TrackTemperatureRequest {
 export interface NextAgendaItem extends AgendaItem {}
 export type NewCurrentSpeaker = Speaker | undefined;
 export type NewCurrentTopic = Speaker | undefined;
-export type UpdateTimeboxEnd = Date | undefined;
 export type NewReaction = Reaction;
 export type DeleteReaction = Reaction;
 export type TrackTemperature = boolean;

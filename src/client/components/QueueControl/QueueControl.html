@@ -7,17 +7,6 @@
         <div class="data-block-details">
           <span>{{ formatUser(currentAgendaItem.user) }}</span>
           <span v-if="currentAgendaItem.timebox">🕒 {{ currentAgendaItem.timebox }} minutes</span>
-          <vac v-if="timeboxEnd" :end-time="timeboxEnd.getTime">
-            <template
-              v-slot:process="{ timeObj }">
-              <span>{{ `Time remaining: ${timeObj.m}:${timeObj.s}` }}</span>
-            </template>
-            <template
-              v-slot:finish>
-                <span>Time expired!</span>
-            </template>
-          </vac>
-          </span>
           <button v-if="$root.isChair" class="button is-small" @click="nextAgendaItem">
             Next Agenda Item
           </button>

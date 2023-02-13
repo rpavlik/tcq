@@ -167,10 +167,6 @@ let AppComponent = Vue.extend({
       this.currentAgendaItem = data;
     });
 
-    socket.on('updateTimeboxEnd', (data) => {
-      this.timeboxEnd = data;
-    });
-
     socket.on('reorderQueue', (data) => {
       this.queuedSpeakers.splice(data.newIndex, 0, this.queuedSpeakers.splice(data.oldIndex, 1)[0]);
     });

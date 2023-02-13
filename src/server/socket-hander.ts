@@ -113,7 +113,6 @@ export default async function connection(socket: Message.ServerSocket) {
     respond(200);
     emitAll(meetingId, 'nextAgendaItem', meeting.currentAgendaItem);
     emitAll(meetingId, 'newCurrentSpeaker', meeting.currentSpeaker);
-    emitAll(meetingId, 'updateTimeboxEnd', meeting.timeboxEnd);
   }
 
   async function deleteAgendaItem(respond: Responder, message: Message.DeleteAgendaItem) {
