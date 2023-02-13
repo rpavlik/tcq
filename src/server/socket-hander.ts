@@ -84,7 +84,10 @@ export default async function connection(socket: Message.ServerSocket) {
     } else {
       let id = meeting.currentAgendaItem.id;
       let currentIndex = meeting.agenda.findIndex((i) => i.id === id);
-      meeting.currentAgendaItem = meeting.agenda[currentIndex + 1];
+      if (currentIndex + 1 < meeting.agenda.length) {
+        // don't run off the end
+        meeting.currentAgendaItem = meeting.agenda[currentIndex + 1];
+      }
     }
 
     meeting.currentSpeaker = {
