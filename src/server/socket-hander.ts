@@ -89,6 +89,10 @@ export default async function connection(socket: Message.ServerSocket) {
         meeting.currentAgendaItem = meeting.agenda[currentIndex + 1];
       }
     }
+    if (meeting.currentAgendaItem && !meeting.currentAgendaItem.timeStarted) {
+      // record start time
+      meeting.currentAgendaItem.timeStarted = new Date();
+    }
 
     if (
       meeting.currentAgendaItem &&
@@ -108,10 +112,14 @@ export default async function connection(socket: Message.ServerSocket) {
       topic: 'Introducing: ' + meeting.currentAgendaItem.name,
       type: 'topic',
     };
+    let nextAgendaItem = {
+      ...{ timeboxEnd: meeting.timeboxEnd },
+      ...meeting.currentAgendaItem,
+    };
 
     await updateMeeting(meeting);
     respond(200);
-    emitAll(meetingId, 'nextAgendaItem', meeting.currentAgendaItem);
+    emitAll(meetingId, 'nextAgendaItem', nextAgendaItem);
     emitAll(meetingId, 'newCurrentSpeaker', meeting.currentSpeaker);
   }
 

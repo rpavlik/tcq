@@ -120,7 +120,9 @@ export interface TrackTemperatureRequest {
   track: boolean;
 }
 
-export interface NextAgendaItem extends AgendaItem {}
+export interface NextAgendaItem extends AgendaItem {
+  timeboxEnd: Date | undefined;
+}
 export type NewCurrentSpeaker = Speaker | undefined;
 export type NewCurrentTopic = Speaker | undefined;
 export type NewReaction = Reaction;

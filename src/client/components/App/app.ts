@@ -1,5 +1,6 @@
 import User from '../../../shared/User';
 import Vue from 'vue';
+import vueAwesomeCountdown from 'vue-awesome-countdown';
 
 import { QueueControl } from '../QueueControl/QueueControl';
 
@@ -14,6 +15,9 @@ import AgendaItem from '../../../shared/AgendaItem';
 import Meeting from '../../../shared/Meeting';
 import * as Message from '../../../shared/Messages';
 import socket from '../../ClientSocket';
+import { Console } from 'console';
+
+Vue.use(vueAwesomeCountdown, 'vac'); // Component name, `countdown` and `vac` by default
 
 Vue.mixin({
   methods: {
@@ -68,6 +72,7 @@ let AppComponent = Vue.extend({
   components: {
     Agenda,
     QueueControl,
+    vueAwesomeCountdown,
   },
   methods: {
     newTopic(message: Message.NewQueuedSpeakerRequest) {
@@ -165,6 +170,17 @@ let AppComponent = Vue.extend({
 
     socket.on('nextAgendaItem', (data) => {
       this.currentAgendaItem = data;
+      if (data.timebox) {
+        let dt = new Date(data.timeStarted);
+        dt.setTime(dt.getTime() + data.timebox * 60000);
+        this.timeboxEnd = dt;
+        console.log('starting new timebox');
+      } else {
+        this.timeboxEnd = undefined;
+        console.log('clearing timebox');
+      }
+      // this.timeboxEnd = data.timeboxEnd;
+      // this.$refs.timeboxVac.
     });
 
     socket.on('reorderQueue', (data) => {

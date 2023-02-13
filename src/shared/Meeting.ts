@@ -2,6 +2,7 @@ import Speaker from './Speaker';
 import Reaction from './Reaction';
 import AgendaItem from './AgendaItem';
 import User from './User';
+
 interface Meeting {
   chairs: User[];
   currentAgendaItem: AgendaItem | undefined;

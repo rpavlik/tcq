@@ -6,6 +6,7 @@ interface AgendaItem {
   timebox?: number;
   user: User;
   id: string;
+  timeStarted?: Date;
 }
 
 export default AgendaItem;

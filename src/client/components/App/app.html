@@ -20,6 +20,16 @@
     </div>
   </nav>
   <agenda ref="agenda" id="agenda" :agenda="agenda" :socket="socket"></agenda>
+  <vac v-if="timeboxEnd" :end-time="timeboxEnd.getTime" ref="timeboxVac">
+    <template
+      v-slot:process="{ timeObj }">
+      <span>{{ `Time remaining for agenda item: ${timeObj.m}:${timeObj.s}` }}</span>
+    </template>
+    <template
+      v-slot:finish>
+        <span>Time expired!</span>
+    </template>
+  </vac>
   <queue-control
     ref="queue"
     id="queue"
