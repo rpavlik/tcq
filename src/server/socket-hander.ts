@@ -90,6 +90,18 @@ export default async function connection(socket: Message.ServerSocket) {
       }
     }
 
+    if (
+      meeting.currentAgendaItem &&
+      meeting.currentAgendaItem.timebox &&
+      meeting.currentAgendaItem.timebox !== 0
+    ) {
+      let endTime = new Date();
+      endTime.setTime(endTime.getTime() + meeting.currentAgendaItem.timebox * 60000);
+      meeting.timeboxEnd = endTime;
+    } else {
+      meeting.timeboxEnd = undefined;
+    }
+
     meeting.currentSpeaker = {
       id: uuid(),
       user: meeting.currentAgendaItem.user,
@@ -101,6 +113,7 @@ export default async function connection(socket: Message.ServerSocket) {
     respond(200);
     emitAll(meetingId, 'nextAgendaItem', meeting.currentAgendaItem);
     emitAll(meetingId, 'newCurrentSpeaker', meeting.currentSpeaker);
+    emitAll(meetingId, 'updateTimeboxEnd', meeting.timeboxEnd);
   }
 
   async function deleteAgendaItem(respond: Responder, message: Message.DeleteAgendaItem) {
