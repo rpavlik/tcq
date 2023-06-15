@@ -26,7 +26,12 @@ server.listen(port, function() {
 
 const mdbClient = new MongoClient(secrets.MONGODB_URL_SECRET);
 
-const mdbSessionStore = MongoStore.create({ client: mdbClient });
+const mdbSessionStore = MongoStore.create({
+  client: mdbClient,
+  // for compat with ferretdb
+  autoRemove: 'interval',
+  autoRemoveInterval: 10, // In minutes. Default
+});
 
 const session = Session({
   secret: secrets.SESSION_SECRET,
